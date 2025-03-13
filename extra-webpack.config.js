@@ -1,11 +1,8 @@
 const postcssModules = require("postcss-modules");
-const path = require("path");
 const AngularWebpackPlugin = require("@ngtools/webpack");
 const nameGenerator = require("./name-ganerator.js");
 
 module.exports = (config, options) => {
-  /*  SCSS EXTEND */
-
   RegExp.prototype.toJSON = RegExp.prototype.toString;
   const uses = config.module.rules
     .find((x) => x.test.toString().includes("scss"))
@@ -23,11 +20,9 @@ module.exports = (config, options) => {
           0,
           postcssModules({
             generateScopedName: function (name, filename, css) {
-              console.log("he?", name, filename, css);
               return nameGenerator(name);
             },
             // getJSON: function (cssFileName, json, outputFileName) {
-            //   console.log("processing", cssFileName);
             // },
           })
         );
@@ -36,45 +31,6 @@ module.exports = (config, options) => {
       loader.options.postcssOptions = newOptionsFn;
     }
   }
-
-  const html = config.module.rules.find((x) =>
-    x.test.toString().includes("html")
-  );
-  // html.use = [
-  //   { loader: 'raw-loader' },
-  //   {
-  //     loader: 'posthtml-loader',
-  //     options: {
-  //       config: {
-  //         path: './',
-  //         ctx: {
-  //           include: { ...options },
-  //           content: { ...options },
-  //         },
-  //       },
-  //     },
-  //   },
-  // ];
-
-  // /*  HTML EXTEND */
-  // config.module.rules.unshift({
-  //   test: /\.html$/,
-  //   use: [
-  //     { loader: 'raw-loader' },
-  //     {
-  //       loader: 'posthtml-loader',
-  //       options: {
-  //         config: {
-  //           path: './',
-  //           ctx: {
-  //             include: { ...options },
-  //             content: { ...options },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   ],
-  // });
 
   config.module.rules.unshift({
     test: /\.html$/,
@@ -96,10 +52,10 @@ module.exports = (config, options) => {
     ],
   });
 
-  const plugin = config.plugins.find(
+  const angularPlugin = config.plugins.find(
     (p) => p instanceof AngularWebpackPlugin.AngularWebpackPlugin
   );
-  plugin.pluginOptions.directTemplateLoading = false;
+  angularPlugin.pluginOptions.directTemplateLoading = false;
 
   return config;
 };
