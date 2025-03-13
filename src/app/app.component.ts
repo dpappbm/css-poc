@@ -6,5 +6,6 @@ import css from './app.component.scss.json';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  title = 'Valami';
   contentClass = css.content;
 }
